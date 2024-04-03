@@ -30,7 +30,7 @@ CREATE TABLE media_content -- Транслируемый контент
 	name VARCHAR(120) NOT NULL, -- Название контента
 	link VARCHAR(250) NOT NULL, -- Адрес файла в файловой системе
 	duration TIME NOT NULL, -- Продолжительность видео
-	
+	preview VARCHAR(250) NOT NULL -- Адрес превью картинки
 );
 
 CREATE TABLE statistics -- Статистика по каждому показу контента
