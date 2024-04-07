@@ -28,10 +28,10 @@ CREATE TABLE camera_screen -- Связующая таблица камеры и 
 CREATE TABLE media_content -- Транслируемый контент
 (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(120) NOT NULL, -- Название контента
 	content VARCHAR(250) NOT NULL, -- Адрес контента в файловой системе
-	duration TIME NOT NULL, -- Продолжительность видео
-	preview VARCHAR(250) NOT NULL -- Адрес превью картинки в файловой системе
+	name VARCHAR(120), -- Название контента
+	duration TIME, -- Продолжительность видео
+	preview VARCHAR(250) -- Адрес превью картинки в файловой системе
 );
 
 CREATE TABLE statistics -- Статистика по каждому показу контента
