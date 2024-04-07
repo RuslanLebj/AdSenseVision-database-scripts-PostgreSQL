@@ -18,6 +18,7 @@ CREATE TABLE screen -- Экраны (медиаплощади для транл�
 
 CREATE TABLE camera_screen -- Связующая таблица камеры и экрана
 (
+	id SERIAL PRIMARY KEY,
 	camera_id INT, -- Камера
     FOREIGN KEY(camera_id) REFERENCES camera(id), 
     screen_id INT, -- Экран
@@ -28,9 +29,9 @@ CREATE TABLE media_content -- Транслируемый контент
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(120) NOT NULL, -- Название контента
-	link VARCHAR(250) NOT NULL, -- Адрес файла в файловой системе
+	content_path VARCHAR(250) NOT NULL, -- Адрес контента в файловой системе
 	duration TIME NOT NULL, -- Продолжительность видео
-	preview VARCHAR(250) NOT NULL -- Адрес превью картинки
+	preview_path VARCHAR(250) NOT NULL -- Адрес превью картинки в файловой системе
 );
 
 CREATE TABLE statistics -- Статистика по каждому показу контента
