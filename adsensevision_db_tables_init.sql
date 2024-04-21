@@ -30,11 +30,13 @@ CREATE TABLE media_content -- Транслируемый контент
 	id SERIAL PRIMARY KEY,
 	video VARCHAR(250) NOT NULL, -- Адрес видеозаписи в файловой системе
 	name VARCHAR(120), -- Название контента
+	description VARCHAR(360), -- Описание контента
+	upload_date DATE, -- Дата загрузки видео
 	duration TIME, -- Продолжительность видео
 	preview VARCHAR(250) -- Адрес превью видеозаписи в файловой системе
 );
 
-CREATE TABLE statistics -- Статистика по каждому показу контента
+CREATE TABLE statistics -- Общая статистика по показам контента
 (
 	id SERIAL PRIMARY KEY,	
 	media_content_id INT, -- Контент, статистику котрого записываем
@@ -55,4 +57,14 @@ CREATE TABLE schedule -- Расписание показа контента (ц�
     FOREIGN KEY(screen_id) REFERENCES screen(id)
 );
 
+CREATE TABLE frame_statistics -- Статистика показа по каждому кадру
+(
+	id SERIAL PRIMARY KEY,	
+	media_content_id INT, -- Контент, статистику котрого записываем
+    FOREIGN KEY(media_content_id) REFERENCES media_content(id), 
+    screen_id INT, -- Экран транслировавший контент
+    FOREIGN KEY(screen_id) REFERENCES screen(id), 
+    viewing_time TIME NOT NULL, -- Время просмотра кадра
+    viewers_count INT NOT NULL -- Количество зрителей в кадре  
+);
 
