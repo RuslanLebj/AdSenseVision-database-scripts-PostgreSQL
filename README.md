@@ -7,15 +7,18 @@ The project's database is designed to manage the broadcasting and analysing cont
 #### `camera` - Cameras
 - `id`: Auto-incremented unique identifier for the camera.
 - `name`: Name or description of the camera location, which may include address, room, or camera number.
-- `address`: Public IP or DNS address for accessing the camera.
+- `url_address`: Public IP or DNS address for accessing the camera.
 - `connection_login`: Login credential for camera access.
 - `connection_password`: Password for camera access.
+- `location_address`: Location (address) where the camera is installed.
 
 #### `screen` - Displays
 - `id`: Auto-incremented unique identifier for the screen.
 - `name`: Name or description of the screen location, which may include address, room, or screen number.
 - `start_time`: Time when content broadcasting starts on this screen.
 - `end_time`: Time when content broadcasting ends on this screen.
+- `pause_time`: Time interval between video shows.
+- `update_date`: Date when the content on the screen was last updated.
 
 #### `camera_screen` - Camera to Screen Link
 - `id`: Auto-incremented unique identifier for the link.
@@ -37,6 +40,7 @@ The project's database is designed to manage the broadcasting and analysing cont
 - `screen_id`: References the screen where the content was broadcast.
 - `total_viewing_time`: Total viewing time of the content.
 - `max_viewers_count`: Maximum number of viewers at any given moment.
+- `show_count`: Number of times the content was shown.
 
 #### `schedule` - Content Showing Schedule
 - `id`: Auto-incremented unique identifier for the schedule entry.
@@ -44,12 +48,12 @@ The project's database is designed to manage the broadcasting and analysing cont
 - `media_content_id`: References the content to be broadcast.
 - `screen_id`: References the screen broadcasting the content.
 
-#### `frame_statistics` - Frame-by-Frame Showing Statistics
-- `id`: Auto-incremented unique identifier for the frame statistics.
+#### `statistics_per_show` - Statistics for Each Content Show
+- `id`: Auto-incremented unique identifier for the show statistics.
 - `media_content_id`: References the content for which statistics are recorded.
-- `screen_id`: References the screen that showed the frame.
-- `viewing_time`: Viewing time for the frame.
-- `viewers_count`: Number of viewers during the frame.
+- `screen_id`: References the screen that showed the content.
+- `viewing_time`: Viewing time for the content show.
+- `viewers_count`: Number of viewers during the content show.
 
 ### Key Features
 
