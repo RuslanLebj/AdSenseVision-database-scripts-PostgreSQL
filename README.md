@@ -3,7 +3,7 @@
 The project's database is designed to manage the broadcasting and analysing content through cameras and displays. It includes tables for storing information about cameras, screens, links between them, content, statistics, and broadcasting schedules.
 
 ### ER Diagram
-![ER Diagram](documentation/ER_Diagram.png)
+![ER Diagram](documentation/ER_Diagram.JPG)
 
 ### Database Tables
 
