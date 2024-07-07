@@ -1,32 +1,31 @@
 -- Создание таблиц
-CREATE TABLE camera -- Камеры
+CREATE TABLE camera -- Камера
 (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(120) NOT NULL, -- Название камеры
+    name VARCHAR(120) NOT NULL, -- Название камеры (можно указать адрес, помещение, номер камеры)
     url_address VARCHAR(80) NOT NULL, -- Общедоступный IP-адрес или DNS(доменный) адрес
     connection_login VARCHAR(50) NOT NULL, -- Логин для подключения к камере
-    connection_password VARCHAR(50) NOT NULL -- Пароль для подключения к камере
+    connection_password VARCHAR(50) NOT NULL, -- Пароль для подключения к камере
+    location_address VARCHAR(120) -- Локация (адрес), где расположена камера
 );
 
-CREATE TABLE screen -- Экраны для транлсяции контента
+CREATE TABLE screen -- Экраны (медиаплощади для транлсяции контента)
 (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(120)NOT NULL, -- Название экрана
+	name VARCHAR(120)NOT NULL, -- Название экрана (можно указать адрес, помещение, номер экрана)
 	start_time TIME NOT NULL, -- Время запуска трансляции контента
     end_time TIME NOT NULL, -- Время остановки трянcляции контента
     pause_time TIME NOT NULL, -- Время паузы между показами видео
     update_date DATE -- Дата обновления проигрываемого на экране контента
 );
 
-CREATE TABLE broadcast_station -- Станция для трансляции контента (Связующая таблица камеры и экрана)
+CREATE TABLE camera_screen -- Связующая таблица камеры и экрана
 (
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(120) NOT NULL, -- Название станции
 	camera_id INT, -- Камера
     FOREIGN KEY(camera_id) REFERENCES camera(id), 
     screen_id INT, -- Экран
-    FOREIGN KEY(screen_id) REFERENCES screen(id),
-    location_address VARCHAR(120) -- Локация (адрес), где расположена станция
+    FOREIGN KEY(screen_id) REFERENCES screen(id)
 );
 
 CREATE TABLE media_content -- Транслируемый контент
@@ -40,7 +39,19 @@ CREATE TABLE media_content -- Транслируемый контент
 	preview VARCHAR(250) -- Адрес превью видеозаписи в файловой системе
 );
 
-CREATE TABLE schedule -- Расписание показа контента (цикличное), плейлист
+CREATE TABLE statistics -- Общая статистика по показам контента
+(
+	id SERIAL PRIMARY KEY,	
+	media_content_id INT, -- Контент, статистику котрого записываем
+    FOREIGN KEY(media_content_id) REFERENCES media_content(id), 
+    screen_id INT, -- Экран транслировавший контент
+    FOREIGN KEY(screen_id) REFERENCES screen(id), 
+    total_viewing_time TIME NOT NULL, -- Общее время просмотра контента
+    max_viewers_count INT NOT NULL, -- Максимальное количество зрителей в момент времени   
+    show_count INT NOT NULL -- Количество показов контента
+);
+
+CREATE TABLE schedule -- Расписание показа контента (цикличное), сессия
 (
 	id SERIAL PRIMARY KEY,
 	queue_number INT NOT NULL, -- Порядковый номер контента в очереди трансляции
@@ -50,28 +61,14 @@ CREATE TABLE schedule -- Расписание показа контента (ц�
     FOREIGN KEY(screen_id) REFERENCES screen(id)
 );
 
-CREATE TABLE statistics -- Статистика по показам контента на каждой станции
-(
-	id SERIAL PRIMARY KEY,	
-	media_content_id INT, -- Контент, статистику котрого записываем
-    FOREIGN KEY(media_content_id) REFERENCES media_content(id), 
-    broadcast_station_id INT, -- Станция транслирующая контент и анализирующая заинтересованность публики
-    FOREIGN KEY(broadcast_station_id) REFERENCES broadcast_station(id), 
-    total_viewing_time TIME, -- Общее время просмотра контента
-    max_viewers_count INT, -- Максимальное количество зрителей в момент времени   
-    show_count INT -- Количество показов контента
-);
-
-
 CREATE TABLE statistics_per_show -- Статистика по каждому отдельному показу контента
 (
 	id SERIAL PRIMARY KEY,	
 	media_content_id INT, -- Контент, статистику котрого записываем
     FOREIGN KEY(media_content_id) REFERENCES media_content(id), 
-    broadcast_station_id INT, -- Станция транслирующая контент и анализирующая заинтересованность публики
-    FOREIGN KEY(broadcast_station_id) REFERENCES broadcast_station(id), 
-    viewing_time TIME NOT NULL, -- Время просмотра контента за показ
-    max_viewers_count INT NOT NULL, -- Максимальное количество зрителей в момент времени
-    show_datetime TIMESTAMP NOT NULL -- Дата и время трансляции
+    screen_id INT, -- Экран транслировавший контент
+    FOREIGN KEY(screen_id) REFERENCES screen(id), 
+    viewing_time TIME NOT NULL, -- Время просмотра кадра
+    viewers_count INT NOT NULL -- Количество зрителей в кадре  
 );
 
